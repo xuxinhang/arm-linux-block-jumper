@@ -68,7 +68,10 @@ void play_page_start_playing () {
     draw_block_prepare();
     clear_screen();
     draw_blocks(0, 0, 0, 0, 0.3, block_data, 40);
+
+    #ifndef _NO_FRAMEBUFFER
     draw_blocks_fb(50, 100, 450, 410, 0.3, block_data, 40);
+    #endif
 
     // Start Second
 }

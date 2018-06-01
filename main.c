@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <termios.h>
+#include <sys/time.h>
+#include <signal.h>
 
 #include "basis.h"
 #include "welcome.h"
@@ -16,6 +18,10 @@
 
 void set_crmode();
 void basic_event_handler(B_EVENT* event);
+void signal_main_handler();
+
+/* Common Variables */
+B_EVENT *event_list = (B_EVENT*)malloc(sizeof(B_EVENT));
 
 /*** 程序主函数 ***/
 int main() {
@@ -23,7 +29,6 @@ int main() {
     int block_data[12];
     int block_data_length = 12;
 
-    B_EVENT *event_list = (B_EVENT*)malloc(sizeof(B_EVENT));
     event_list->type = Next;
     
     set_crmode(); // 配置终端参数
@@ -58,7 +63,6 @@ int main() {
                 break;
             }
         }
-
 
         while (event_item != NULL) {
 
@@ -111,6 +115,10 @@ void basic_event_handler(B_EVENT* event) {
     if (event) {
 
     }
+}
+
+void signal_main_handler() {
+    
 }
 
 

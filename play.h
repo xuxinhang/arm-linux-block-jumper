@@ -2,7 +2,9 @@
 #include "block_drawer.h"
 #include "block_drawer.c"
 
+#ifndef _NO_FRAMEBUFFER
 #include "block_drawer_fb.c"
+#endif
 
 
 enum game_play_status {Waiting, Playing, Pause, Fail, Pass};
