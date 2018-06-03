@@ -17,11 +17,11 @@ int draw_blocks (int x1, int y1, int x2, int y2, float offset, int data_array[],
         current_block_data = data_array[i];
         for (k = 0; k < BLOCK_H - offset_line_number; k++) {
             for(j = 0; j < current_block_data-1; j++) {
-                printf(empty_line);
+                printf("%s", empty_line);
             }
-            printf(full_line);
+            printf("%s", full_line);
             for(j = j+1; j < 4; j++) {
-                printf(empty_line);
+                printf("%s", empty_line);
             }
             printf("\n");
         }
@@ -30,6 +30,12 @@ int draw_blocks (int x1, int y1, int x2, int y2, float offset, int data_array[],
     }
 
     return draw_row_number;
+}
+
+
+void draw_block_prepare(){
+    // 在画方块之前进行清屏等准备
+    // 以后再写
 }
 
 void set_redraw_timeout() {

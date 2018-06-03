@@ -4,7 +4,7 @@
 
 #define clear_screen() printf("\033[H\033[J")
 
-enum event_type {Next, KeyDown, KeyUp };
+enum event_type { Next, KeyDown, KeyUp, Timeout };
 enum page_type { Welcome, Play };
 
 typedef struct Event_Item {
@@ -13,6 +13,11 @@ typedef struct Event_Item {
     struct Event_Item *_next;
 } B_EVENT;
 
+typedef struct Timeout_Flag_Queue {
+    int flag;
+    int signal;
+    struct Timeout_Flag_Queue *_next;
+} B_TIMEOUT_QUEUE;
 
 
 /**** Global Variable ****/
