@@ -31,6 +31,6 @@ void show_welcome() {
     printf("**                                **\n");
     printf("========== by: Bob Green ===========\n");
     printf("\n");
-    printf("Your choice:\t");
+    printf("Your choice:\n");
     // generate_block_data(block_data, block_data_length);
 }

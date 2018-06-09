@@ -5,7 +5,8 @@
 #define PLAY_PAUSE_KEY ' '
 
 
-int block_data[40];
+int* block_data = NULL;
+int block_data_length = 40;
 
 int waiting_block_data;
 
@@ -25,18 +26,51 @@ void print_play_screen() {
     printf("[B] Return to welcome screen\n");
 }
 
+void print_fail_screen () {
+    printf("~ Good luck next time ~");
+}
+
+void print_pass_screen () {
+    clear_screen();
+    printf("What a talent you are !");
+}
+
+
+float draw_offset = 0.0;
+int* block_data_pointer = NULL;
+int current_block_type = -1;
+int is_selected_block_type_correct = Right;
+
 int play_page_event_handler (B_EVENT* event) {
 
-    static float draw_offset = 0.0;
+    if (block_data_pointer == NULL) {
+        block_data_pointer = block_data;
+    }
 
     if (event->type == KeyDown || event->type == KeyUp) {
         if (play_page_status == Playing) {
             switch(event->value) {
                 case BLOCK_1_KEY:
-                if (waiting_block_data == 1) {
+                if (is_selected_block_type_correct == Unknown) {
+                    is_selected_block_type_correct = current_block_type == 1 ? Right : Wrong;
+                }
+                break;
 
-                } else {
+                case BLOCK_2_KEY:
+                if (is_selected_block_type_correct == Unknown) {
+                    is_selected_block_type_correct = current_block_type == 2 ? Right : Wrong;
+                }
+                break;
 
+                case BLOCK_3_KEY:
+                if (is_selected_block_type_correct == Unknown) {
+                    is_selected_block_type_correct = current_block_type == 3 ? Right : Wrong;
+                }
+                break;
+
+                case BLOCK_4_KEY:
+                if (is_selected_block_type_correct == Unknown) {
+                    is_selected_block_type_correct = current_block_type == 4 ? Right : Wrong;
                 }
                 break;
             }
@@ -50,29 +84,96 @@ int play_page_event_handler (B_EVENT* event) {
                 show_welcome();
                 break;
             }
+        } else if (play_page_status == Fail) {
+            switch (event->value) {
+                default:
+                play_page_status = Waiting;
+                print_play_screen();
+            }
+        } else if (play_page_status = Pass) {
+            switch (event->value) {
+                default:
+                play_page_status = Waiting;
+                print_play_screen();
+            }
         }
-    } else if (event->type == Timeout) {
-        if (event->value > 0) { // [TODO]
-            refresh_frame(draw_offset, data_);
+    } else if (event->type == Timeout && play_page_status == Playing) {
+        // printf("Timeout in Play screen");
+        if (play_page_status == Playing && event->value == FrameRefresh) { // [TODO]
+            current_block_type = *block_data_pointer;
 
+            // 剩余块的数量（包括当前块在内）
+            int block_remained_number = block_data + block_data_length - block_data_pointer;
 
+            if (is_selected_block_type_correct == Wrong) {
+                printf("{{ You Wrong }}");
+                play_page_status = Fail;
+            }
+
+            if (draw_offset == 0.0 || draw_offset < 0.001) {
+                if (is_selected_block_type_correct == Unknown) {
+                    play_page_status = Fail;
+                    block_data_pointer--;
+                    block_remained_number++;
+                    draw_offset = 0.7;
+                    is_selected_block_type_correct = Wrong;
+                } else if (is_selected_block_type_correct == Right && block_remained_number == 0) {
+                    play_page_status = Pass;
+                } else {
+                    is_selected_block_type_correct = Unknown;
+                }
+            }
+
+            // Set special block effect
+            if (is_selected_block_type_correct == Right) {
+                (*block_data_pointer) |= BLOCK_STATE_RIGHT;
+            } else if (is_selected_block_type_correct == Wrong) {
+                (*block_data_pointer) |= BLOCK_STATE_WRONG;
+            }
+
+            refresh_frame(draw_offset, block_data_pointer, block_remained_number > 5 ? 5 : block_remained_number);
+            
+            draw_offset += 0.2;
+            if (draw_offset >= 0.999) {
+                block_data_pointer++;
+                draw_offset = 0.0;
+            }
+
+            // Print other screens
+            if (play_page_status == Pass) {
+                print_pass_screen();
+            } else if (play_page_status == Fail) {
+                print_fail_screen();
+            }
+        }
+    }
 
     return 0;
 }
 
 void play_page_start_playing () {
-    play_page_status = Playing;
     // Screen Output
     clear_screen();
     printf("= = = = = = = = = = =\n= Play Start, Now! =\n");
 
     // Genrate block series
-    generate_block_data(block_data, 40);
+    if (block_data != NULL) {
+        free(block_data);
+    }
+    block_data = (int*)malloc(block_data_length * sizeof(int));
+    generate_block_data(block_data, block_data_length);
 
     // Prepare to print game image
     clear_screen();
     draw_block_prepare();
 
+    // Reset variables
+    draw_offset = 0.0;
+    block_data_pointer = NULL;
+    current_block_type = -1;
+    is_selected_block_type_correct = Right;
+
+    play_page_status = Playing;
 }
 
 

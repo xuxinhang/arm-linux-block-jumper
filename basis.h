@@ -6,6 +6,7 @@
 
 enum event_type { Next, KeyDown, KeyUp, Timeout };
 enum page_type { Welcome, Play };
+enum timeout_type { FrameRefresh };
 
 typedef struct Event_Item {
     enum event_type type;
