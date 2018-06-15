@@ -56,7 +56,7 @@ int main() {
     * 用于处理消息机制
     */
 
-    create_signal_timeout(1,100,0,770000, FrameRefresh);
+    create_signal_timeout(1,100,0,660000, FrameRefresh);
     // 1, 100 , 0 , 330000
 
     while (1) {

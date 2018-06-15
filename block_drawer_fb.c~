@@ -204,14 +204,14 @@ int update_blocks_fb () {
 
 int draw_blocks_fb (int x1, int y1, int x2, int y2, float offset, int data_array[], int data_array_length) {
 
-    /*int only_draw_the_last = 1;
+    int only_draw_the_last = 1;
     int x = 0, y = 0;
     for (y = y2; y >= y1; y--) {
         for (x = x2; x >= x1; x--) {
             *(fbp + y * 640*2 + x *2) = *(fbp + (y-1) * 640*2 + x *2);
             *(fbp + y * 640*2 + x *2 + 1) = *(fbp + (y-1) * 640*2 + x *2 + 1);
         }
-    }*/
+    }
     
     int dx, dy;
     int i, j;
@@ -233,12 +233,12 @@ int draw_blocks_fb (int x1, int y1, int x2, int y2, float offset, int data_array
     block_num_y = 4 + (offset == 0 ? 0 : 1);
 
     for(i = 0; i < block_num_y; i++) {
-        /*if (only_draw_the_last) {
+        if (only_draw_the_last) {
             if (i == block_num_y - 1) {
             } else {
                 continue;
             }
-        }*/
+        }
     
         if (i == 0) {
             y_line_btm = y2;

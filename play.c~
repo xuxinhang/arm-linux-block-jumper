@@ -133,7 +133,7 @@ int play_page_event_handler (B_EVENT* event) {
 
             refresh_frame(draw_offset, block_data_pointer, block_remained_number > 5 ? 5 : block_remained_number);
             
-            draw_offset += 0.4;
+            draw_offset += 0.2;
             if (draw_offset >= 0.999) {
                 block_data_pointer++;
                 draw_offset = 0.0;
