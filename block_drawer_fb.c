@@ -21,6 +21,7 @@
 char *fbp = 0;
 
 int need_repaint =1;
+int need_draw_all = 1;
 
 /*
  * framebuffer application code, the start code of Linux GUI application
@@ -210,7 +211,7 @@ int draw_blocks_fb (int x1, int y1, int x2, int y2, float offset, int data_array
     int area_width = x2 - x1;
     int area_height= y2 - y1;
 
-    if (!need_draw_all) {
+    /* if (!need_draw_all) {
         int x = 0, y = 0;
         for (y = y2; y >= y1; y--) {
             for (x = x2; x >= x1; x--) {
@@ -218,7 +219,7 @@ int draw_blocks_fb (int x1, int y1, int x2, int y2, float offset, int data_array
                 *(fbp + y * area_width*2 + x *2 + 1) = *(fbp + (y-1) * area_width*2 + x *2 + 1);
             }
         }
-    }
+    } */
     
     int dx, dy;
     int i, j;
@@ -240,13 +241,6 @@ int draw_blocks_fb (int x1, int y1, int x2, int y2, float offset, int data_array
     block_num_y = 4 + (offset == 0 ? 0 : 1);
 
     for(i = 0; i < block_num_y; i++) {
-        if (!need_draw_all) {
-            if (i >= 4) {
-                
-            } else {
-                continue;
-            }
-        }
     
         if (i == 0) {
             y_line_btm = y2;
@@ -298,7 +292,7 @@ int draw_blocks_fb (int x1, int y1, int x2, int y2, float offset, int data_array
         
     }
     
-    need_draw_all = 0;
+    // need_draw_all = 0;
     
     return block_num_x * block_num_y;
 
@@ -314,7 +308,7 @@ int draw_block_prepare_fb() {
     int x = 0, y = 0;
     int k;
     
-    need_draw_all = 1;
+    // need_draw_all = 1;
 
     // Open the file for reading and writing
     fbfd = open("/dev/fb0", O_RDWR);
